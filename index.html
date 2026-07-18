@@ -65,11 +65,18 @@
     .flagged{border-color:#a7d8bc!important;background:#edf9f2!important;color:#176b3a!important}
     .status{min-height:20px;margin-top:14px;color:var(--muted);font-size:13px}.error{color:var(--danger)}
     .small{margin-top:14px;color:var(--muted);font-size:13px}
+
+    .test-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+    .test-grid label{display:block;margin-bottom:6px;font-weight:700;color:#344054}
+    .test-grid input,.test-grid select{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--line);
+      border-radius:12px;background:#fff;color:var(--text);font:inherit}
+    .research-badge{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;
+      background:#fff3d6;border:1px solid #f0cc73;color:#755100;font-size:12px;font-weight:700;margin-bottom:16px}
     @media(max-width:640px){
       body{background:#fff}.shell{width:100%;margin:0}.app{min-height:100dvh;border:0;border-radius:0;box-shadow:none}
       .top{min-height:70px;padding:12px 14px}.avatar{width:42px;height:42px;flex-basis:42px}
       .center{padding:24px 18px}h2{font-size:23px}.stage{padding:18px 14px 26px}.stack{max-width:84%}
-      .composer{padding:12px 12px calc(14px + env(safe-area-inset-bottom))}.actions{grid-template-columns:1fr}
+      .composer{padding:12px 12px calc(14px + env(safe-area-inset-bottom))}.actions{grid-template-columns:1fr}.test-grid{grid-template-columns:1fr}
     }
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
   </style>
@@ -79,7 +86,7 @@
 <section class="app" aria-label="AI tutor activity">
   <header class="top">
     <div class="identity">
-      <img class="avatar" src="nova-avatar.svg" alt="Nova chatbot profile picture" title="Nova, AI tutor">
+      <img class="avatar" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2VlZjRmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNkYmU3ZmYiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImZhY2UiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2Y0ZjdmYiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPGNpcmNsZSBjeD0iMTI4IiBjeT0iMTI4IiByPSIxMjQiIGZpbGw9InVybCgjYmcpIi8+CiAgPGNpcmNsZSBjeD0iMTI4IiBjeT0iMTI4IiByPSIxMjMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2I5YzllOCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTEyOCA0OHYtMTgiIHN0cm9rZT0iIzI1NjNlYiIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8Y2lyY2xlIGN4PSIxMjgiIGN5PSIyNCIgcj0iMTAiIGZpbGw9IiMyNTYzZWIiLz4KICA8cmVjdCB4PSI1MyIgeT0iNjEiIHdpZHRoPSIxNTAiIGhlaWdodD0iMTMyIiByeD0iNDgiIGZpbGw9InVybCgjZmFjZSkiIHN0cm9rZT0iIzI1NjNlYiIgc3Ryb2tlLXdpZHRoPSI3Ii8+CiAgPHJlY3QgeD0iMzgiIHk9IjEwMSIgd2lkdGg9IjIyIiBoZWlnaHQ9IjU0IiByeD0iMTEiIGZpbGw9IiMyNTYzZWIiLz4KICA8cmVjdCB4PSIxOTYiIHk9IjEwMSIgd2lkdGg9IjIyIiBoZWlnaHQ9IjU0IiByeD0iMTEiIGZpbGw9IiMyNTYzZWIiLz4KICA8Y2lyY2xlIGN4PSI5NiIgY3k9IjExOSIgcj0iMTMiIGZpbGw9IiMyNTYzZWIiLz4KICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSIxMTkiIHI9IjEzIiBmaWxsPSIjMjU2M2ViIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSIxMTUiIHI9IjQiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9Ii45Ii8+CiAgPGNpcmNsZSBjeD0iMTU2IiBjeT0iMTE1IiByPSI0IiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIuOSIvPgogIDxwYXRoIGQ9Ik05MSAxNTdjMTIgMTEgMjUgMTYgMzcgMTZzMjUtNSAzNy0xNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjA3MDhhIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik04MyA3N2MxMy05IDI4LTEzIDQ1LTEzczMyIDQgNDUgMTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M5ZDhmNCIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+" alt="Nova chatbot profile picture" title="Nova, AI tutor">
       <div><h1>Nova</h1><div class="presence"><span class="dot"></span><span>Everyday Knowledge Tutor · Online</span></div></div>
     </div>
     <div class="step" id="step">Ready</div>
@@ -93,6 +100,31 @@
       <div class="notice">After the final message, you will return to the survey automatically.</div>
       <button class="primary" id="start" type="button">Start conversation</button>
       <div class="status error" id="landingError" aria-live="polite"></div>
+    </div>
+  </section>
+
+
+  <section class="screen center" id="tester">
+    <div class="card">
+      <div class="research-badge">Research-team testing mode</div>
+      <h2>Test Nova from GitHub Pages</h2>
+      <p>Select a condition and launch the same production chatbot that participants will receive through Qualtrics.</p>
+      <div class="notice">Participants will not see this screen when they enter through the Qualtrics link containing their participant ID and assigned condition.</div>
+      <div class="test-grid">
+        <div>
+          <label for="testPid">Test participant ID</label>
+          <input id="testPid" type="text" value="TEST001" autocomplete="off">
+        </div>
+        <div>
+          <label for="testCondition">Condition</label>
+          <select id="testCondition">
+            <option value="formal">Formal English</option>
+            <option value="pidgin">English–Pidgin</option>
+          </select>
+        </div>
+      </div>
+      <button class="primary" id="launchTest" type="button" style="margin-top:18px">Launch test conversation</button>
+      <div class="status error" id="testError" aria-live="polite"></div>
     </div>
   </section>
 
@@ -132,9 +164,10 @@
   "use strict";
 
   const CONFIG = {
-    studyVersion: "5.0",
+    studyVersion: "6.0",
     botName: "Nova",
-    botAvatar: "nova-avatar.svg",
+    allowBaseUrlTesting: true,
+    botAvatar: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2VlZjRmZiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNkYmU3ZmYiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImZhY2UiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2Y0ZjdmYiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPGNpcmNsZSBjeD0iMTI4IiBjeT0iMTI4IiByPSIxMjQiIGZpbGw9InVybCgjYmcpIi8+CiAgPGNpcmNsZSBjeD0iMTI4IiBjeT0iMTI4IiByPSIxMjMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2I5YzllOCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTEyOCA0OHYtMTgiIHN0cm9rZT0iIzI1NjNlYiIgc3Ryb2tlLXdpZHRoPSI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8Y2lyY2xlIGN4PSIxMjgiIGN5PSIyNCIgcj0iMTAiIGZpbGw9IiMyNTYzZWIiLz4KICA8cmVjdCB4PSI1MyIgeT0iNjEiIHdpZHRoPSIxNTAiIGhlaWdodD0iMTMyIiByeD0iNDgiIGZpbGw9InVybCgjZmFjZSkiIHN0cm9rZT0iIzI1NjNlYiIgc3Ryb2tlLXdpZHRoPSI3Ii8+CiAgPHJlY3QgeD0iMzgiIHk9IjEwMSIgd2lkdGg9IjIyIiBoZWlnaHQ9IjU0IiByeD0iMTEiIGZpbGw9IiMyNTYzZWIiLz4KICA8cmVjdCB4PSIxOTYiIHk9IjEwMSIgd2lkdGg9IjIyIiBoZWlnaHQ9IjU0IiByeD0iMTEiIGZpbGw9IiMyNTYzZWIiLz4KICA8Y2lyY2xlIGN4PSI5NiIgY3k9IjExOSIgcj0iMTMiIGZpbGw9IiMyNTYzZWIiLz4KICA8Y2lyY2xlIGN4PSIxNjAiIGN5PSIxMTkiIHI9IjEzIiBmaWxsPSIjMjU2M2ViIi8+CiAgPGNpcmNsZSBjeD0iOTIiIGN5PSIxMTUiIHI9IjQiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9Ii45Ii8+CiAgPGNpcmNsZSBjeD0iMTU2IiBjeT0iMTE1IiByPSI0IiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIuOSIvPgogIDxwYXRoIGQ9Ik05MSAxNTdjMTIgMTEgMjUgMTYgMzcgMTZzMjUtNSAzNy0xNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjA3MDhhIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik04MyA3N2MxMy05IDI4LTEzIDQ1LTEzczMyIDQgNDUgMTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2M5ZDhmNCIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+",
     googleSheetsEndpoint: "",
     postSurveyUrl: "",
     typingDelayMs: 700,
@@ -175,14 +208,14 @@
 
   const el = id => document.getElementById(id);
   const E = {
-    landing:el("landing"), invalid:el("invalid"), chat:el("chat"), complete:el("complete"),
-    start:el("start"), stage:el("stage"), next:el("continue"), flag:el("flag"),
+    landing:el("landing"), tester:el("tester"), invalid:el("invalid"), chat:el("chat"), complete:el("complete"),
+    start:el("start"), launchTest:el("launchTest"), testPid:el("testPid"), testCondition:el("testCondition"), testError:el("testError"), stage:el("stage"), next:el("continue"), flag:el("flag"),
     ret:el("return"), status:el("saveStatus"), bar:el("bar"), step:el("step")
   };
 
   function now(){return new Date().toISOString()}
   function elapsed(){return state.startTimeISO ? Date.now()-new Date(state.startTimeISO).getTime() : 0}
-  function show(target){[E.landing,E.invalid,E.chat,E.complete].forEach(x=>x.classList.remove("active"));target.classList.add("active")}
+  function show(target){[E.landing,E.tester,E.invalid,E.chat,E.complete].forEach(x=>x.classList.remove("active"));target.classList.add("active")}
   function persist(){if(!storageKey)return;try{sessionStorage.setItem(storageKey,JSON.stringify(state))}catch(_){}}
   function restore(){if(!storageKey)return false;try{
     const raw=sessionStorage.getItem(storageKey); if(!raw)return false;
@@ -305,8 +338,24 @@
       E.status.classList.add("error");E.ret.disabled=false;return}
     E.status.classList.remove("error");E.status.textContent="Opening the survey…";setTimeout(()=>location.assign(u),300)
   }
+
+  function launchTester(){
+    const testPid=(E.testPid.value||"").trim();
+    const testCondition=E.testCondition.value;
+    if(!testPid){
+      E.testError.textContent="Enter a test participant ID.";
+      return;
+    }
+    E.testError.textContent="";
+    const u=new URL(location.href);
+    u.search="";
+    u.hash="";
+    u.searchParams.set("pid",testPid);
+    u.searchParams.set("condition",testCondition);
+    location.assign(u.toString());
+  }
   function init(){
-    if(!valid){show(E.invalid);progress();return}
+    if(!valid){show(CONFIG.allowBaseUrlTesting ? E.tester : E.invalid);progress();return}
     const restored=restore();
     if(restored&&state.completed){progress();show(E.complete);E.status.textContent="This interaction was already completed in this browser session.";return}
     if(restored&&state.startTimeISO&&!state.completed)sessionStorage.removeItem(storageKey);
@@ -314,6 +363,7 @@
   }
 
   E.start.addEventListener("click",start);
+  E.launchTest.addEventListener("click",launchTester);
   E.next.addEventListener("click",next);
   E.flag.addEventListener("click",flag);
   E.ret.addEventListener("click",returnSurvey);
