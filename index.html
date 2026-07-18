@@ -1,819 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Everyday Knowledge AI Tutor</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Nova | Everyday Knowledge Tutor</title>
   <style>
-    :root {
-      --bg: #f4f6f8;
-      --panel: #ffffff;
-      --text: #15202b;
-      --muted: #667085;
-      --border: #d0d5dd;
-      --accent: #2457d6;
-      --accent-soft: #eef3ff;
-      --bot: #f2f4f7;
-      --user: #e7efff;
-      --danger: #b42318;
+    :root{
+      --page:#eef2f6;--panel:#fff;--soft:#f7f9fc;--text:#182230;--muted:#667085;
+      --line:#d8dee8;--bot:#f2f4f7;--user:#dce9ff;--primary:#2563eb;
+      --primary2:#1d4ed8;--primary-soft:#eaf1ff;--success:#138a4b;--danger:#b42318;
+      --shadow:0 16px 40px rgba(16,24,40,.10)
     }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+    *{box-sizing:border-box}
+    html,body{min-height:100%}
+    body{margin:0;background:radial-gradient(circle at top left,rgba(37,99,235,.08),transparent 28rem),var(--page);
+      color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+    button{font:inherit}
+    .shell{width:min(820px,calc(100% - 24px));margin:24px auto}
+    .app{min-height:760px;display:flex;flex-direction:column;overflow:hidden;background:var(--panel);
+      border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .top{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;
+      border-bottom:1px solid var(--line);background:rgba(255,255,255,.97)}
+    .identity{display:flex;align-items:center;gap:12px;min-width:0}
+    .avatar{width:46px;height:46px;display:block;object-fit:cover;border:1px solid #c9d5e7;
+      border-radius:50%;background:#fff;flex:0 0 46px}
+    h1{margin:0;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .presence{display:flex;align-items:center;gap:6px;margin-top:4px;color:var(--muted);font-size:13px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--success)}
+    .step{color:var(--muted);font-size:13px;flex:0 0 auto}
+    .track{height:4px;background:#edf0f5}.bar{height:100%;width:0;background:var(--primary);transition:width .25s}
+    .screen{display:none;flex:1}.screen.active{display:flex;flex-direction:column}
+    .center{justify-content:center;padding:36px}.card{width:min(600px,100%);margin:auto}
+    h2{margin:0 0 12px;font-size:26px}.card p{margin:0 0 16px;line-height:1.65;color:#344054}
+    .notice{margin:20px 0;padding:14px 16px;border:1px solid #c8d8ff;border-radius:14px;background:var(--primary-soft);
+      color:#24457d;line-height:1.5}
+    .primary,.choice{min-height:46px;border-radius:12px;padding:11px 16px;cursor:pointer}
+    .primary{border:1px solid var(--primary);background:var(--primary);color:#fff;font-weight:700}
+    .primary:hover{background:var(--primary2)}.choice{border:1px solid var(--line);background:#fff;color:var(--text);font-weight:650}
+    .choice:hover{background:#f8fafc;border-color:#b9c3d1}
+    button:disabled{cursor:not-allowed;opacity:.55}
+    .chatScreen{min-height:0}.stage{flex:1;min-height:0;overflow-y:auto;padding:24px 22px 30px;scroll-behavior:smooth;
+      background:linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,.9)),
+      radial-gradient(circle at 10% 10%,rgba(37,99,235,.08),transparent 22rem)}
+    .day{display:flex;justify-content:center;margin:2px 0 24px}.day span{padding:6px 10px;border-radius:999px;background:#eef2f6;
+      color:var(--muted);font-size:12px}
+    .row{display:flex;align-items:flex-end;gap:9px;margin:14px 0;animation:in .18s ease-out}
+    @keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+    .row.user{justify-content:flex-end}.mini{width:30px;height:30px;display:block;object-fit:cover;border:1px solid #c9d5e7;
+      border-radius:50%;background:#fff;flex:0 0 30px}
+    .stack{max-width:min(78%,610px)}.name{margin:0 0 5px 3px;color:var(--muted);font-size:12px}
+    .bubble{padding:12px 14px;border-radius:18px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+    .row.bot .bubble{background:var(--bot);border-bottom-left-radius:5px}.row.user .bubble{background:var(--user);border-bottom-right-radius:5px}
+    .meta{margin-top:5px;color:var(--muted);font-size:11px}.row.user .meta{text-align:right;margin-right:3px}
+    .typing{min-width:66px;display:flex;gap:5px;align-items:center}.td{width:7px;height:7px;border-radius:50%;background:#98a2b3;
+      animation:typing 1.1s infinite ease-in-out}.td:nth-child(2){animation-delay:.14s}.td:nth-child(3){animation-delay:.28s}
+    @keyframes typing{0%,60%,100%{transform:none;opacity:.55}30%{transform:translateY(-3px);opacity:1}}
+    .system{width:fit-content;max-width:88%;margin:12px auto;padding:9px 12px;border:1px solid var(--line);border-radius:999px;
+      background:rgba(255,255,255,.95);color:var(--muted);font-size:12px;text-align:center}
+    .composer{padding:14px 18px 16px;border-top:1px solid var(--line);background:rgba(255,255,255,.98)}
+    .fake{min-height:48px;display:flex;align-items:center;padding:11px 14px;border:1px solid var(--line);border-radius:14px;
+      background:var(--soft);color:#98a2b3}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}
+    .flagged{border-color:#a7d8bc!important;background:#edf9f2!important;color:#176b3a!important}
+    .status{min-height:20px;margin-top:14px;color:var(--muted);font-size:13px}.error{color:var(--danger)}
+    .small{margin-top:14px;color:var(--muted);font-size:13px}
+    @media(max-width:640px){
+      body{background:#fff}.shell{width:100%;margin:0}.app{min-height:100dvh;border:0;border-radius:0;box-shadow:none}
+      .top{min-height:70px;padding:12px 14px}.avatar{width:42px;height:42px;flex-basis:42px}
+      .center{padding:24px 18px}h2{font-size:23px}.stage{padding:18px 14px 26px}.stack{max-width:84%}
+      .composer{padding:12px 12px calc(14px + env(safe-area-inset-bottom))}.actions{grid-template-columns:1fr}
     }
-
-    .shell {
-      width: min(760px, calc(100% - 24px));
-      margin: 24px auto;
-    }
-
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    .header {
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .header h1 {
-      font-size: 18px;
-      margin: 0;
-    }
-
-    .status {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .screen {
-      display: none;
-      padding: 22px;
-    }
-
-    .screen.active { display: block; }
-
-    h2 {
-      margin-top: 0;
-      font-size: 22px;
-    }
-
-    p, li { line-height: 1.55; }
-
-    label {
-      display: block;
-      margin-top: 16px;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
-    input[type="text"], select {
-      width: 100%;
-      padding: 11px 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 16px;
-      background: #fff;
-    }
-
-    button {
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--text);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    button:hover { background: #f8fafc; }
-
-    button.primary {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
-
-    button.primary:hover { filter: brightness(0.95); }
-
-    button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    .actions {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .chat {
-      height: 500px;
-      overflow-y: auto;
-      padding: 18px;
-      background: #fbfcfe;
-    }
-
-    .message-row {
-      display: flex;
-      margin: 10px 0;
-    }
-
-    .message-row.user { justify-content: flex-end; }
-
-    .bubble {
-      max-width: 82%;
-      padding: 11px 13px;
-      border-radius: 14px;
-      line-height: 1.45;
-      white-space: pre-wrap;
-    }
-
-    .message-row.bot .bubble {
-      background: var(--bot);
-      border-bottom-left-radius: 4px;
-    }
-
-    .message-row.user .bubble {
-      background: var(--user);
-      border-bottom-right-radius: 4px;
-    }
-
-    .typing {
-      color: var(--muted);
-      font-style: italic;
-      font-size: 14px;
-    }
-
-    .chat-controls {
-      border-top: 1px solid var(--border);
-      padding: 14px 18px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .progress-wrap {
-      height: 6px;
-      background: #e9edf3;
-    }
-
-    .progress {
-      height: 100%;
-      width: 0%;
-      background: var(--accent);
-      transition: width .25s ease;
-    }
-
-    .notice {
-      background: var(--accent-soft);
-      border: 1px solid #c9d7ff;
-      border-radius: 10px;
-      padding: 12px;
-      margin: 12px 0;
-    }
-
-    .error {
-      color: var(--danger);
-      margin-top: 10px;
-      display: none;
-    }
-
-    .small {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .hidden { display: none !important; }
-
-    @media (max-width: 520px) {
-      .shell { margin: 8px auto; width: min(100% - 12px, 760px); }
-      .screen { padding: 16px; }
-      .chat { height: 445px; padding: 12px; }
-      .bubble { max-width: 90%; }
-    }
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
-  <main class="shell">
-    <section class="panel">
-      <header class="header">
-        <h1>Everyday Knowledge AI Tutor</h1>
-        <div class="status" id="statusLabel">AI tutor ready</div>
-      </header>
+<main class="shell">
+<section class="app" aria-label="AI tutor activity">
+  <header class="top">
+    <div class="identity">
+      <img class="avatar" src="nova-avatar.svg" alt="Nova chatbot profile picture" title="Nova, AI tutor">
+      <div><h1>Nova</h1><div class="presence"><span class="dot"></span><span>Everyday Knowledge Tutor · Online</span></div></div>
+    </div>
+    <div class="step" id="step">Ready</div>
+  </header>
+  <div class="track"><div class="bar" id="bar"></div></div>
 
-      <div class="progress-wrap"><div class="progress" id="progressBar"></div></div>
+  <section class="screen center active" id="landing">
+    <div class="card">
+      <h2>AI tutor activity</h2>
+      <p>You will have a short conversation with Nova, an AI tutor for everyday knowledge. Please read each message carefully and respond using the options provided.</p>
+      <div class="notice">After the final message, you will return to the survey automatically.</div>
+      <button class="primary" id="start" type="button">Start conversation</button>
+      <div class="status error" id="landingError" aria-live="polite"></div>
+    </div>
+  </section>
 
-      <section class="screen active" id="welcomeScreen">
-        <h2>AI tutor activity</h2>
-        <p>
-          You will have a brief conversation with an AI tutor about everyday
-          knowledge. Please read each response carefully and interact naturally.
-        </p>
-        <div class="notice">
-          When the activity is complete, you will be returned to the survey
-          automatically.
-        </div>
+  <section class="screen center" id="invalid">
+    <div class="card">
+      <h2>Please return to the survey</h2>
+      <p>This activity must be opened through the link provided in the survey. The current link does not contain the required study information.</p>
+      <div class="notice">Return to the survey tab and select the AI tutor link again.</div>
+    </div>
+  </section>
 
-        <div id="developerFields" class="hidden">
-          <label for="participantId">Test participant ID</label>
-          <input id="participantId" type="text" autocomplete="off"
-                 placeholder="Example: TEST001" />
+  <section class="screen chatScreen" id="chat">
+    <div class="stage" id="stage" aria-live="polite"><div class="day"><span>Today</span></div></div>
+    <div class="composer">
+      <div class="fake" aria-hidden="true">Choose a response below</div>
+      <div class="actions">
+        <button class="choice" id="continue" type="button">Continue</button>
+        <button class="choice" id="flag" type="button">Flag for verification</button>
+      </div>
+    </div>
+  </section>
 
-          <label for="forcedCondition">Test condition</label>
-          <select id="forcedCondition">
-            <option value="formal">Formal English</option>
-            <option value="pidgin">English–Pidgin</option>
-          </select>
-
-          <p class="small">
-            These fields appear only when the Qualtrics URL parameters are missing.
-          </p>
-        </div>
-
-        <div class="actions">
-          <button class="primary" id="startButton" type="button">
-            Begin interaction
-          </button>
-        </div>
-        <div class="error" id="welcomeError">
-          This activity link is incomplete. Please return to the survey and use
-          the link provided there.
-        </div>
-      </section>
-
-      <section class="screen" id="chatScreen">
-        <div class="chat" id="chatLog" aria-live="polite"></div>
-        <div class="chat-controls" id="chatControls">
-          <button type="button" data-action="continue">Continue</button>
-          <button type="button" data-action="explain">Explain again</button>
-          <button type="button" data-action="challenge">Are you sure?</button>
-          <button type="button" data-action="source">Check source</button>
-        </div>
-      </section>
-
-      <section class="screen" id="completeScreen">
-        <h2>Interaction complete</h2>
-        <p>
-          Your interaction has been recorded. Select the button below to continue
-          to the survey.
-        </p>
-
-        <div class="actions">
-          <button class="primary" id="continueSurveyButton" type="button">
-            Continue to survey
-          </button>
-        </div>
-
-        <p class="small" id="saveStatus" aria-live="polite"></p>
-        <div class="error" id="redirectError">
-          The return survey address has not been configured. Please inform the researcher.
-        </div>
-      </section>
-    </section>
-  </main>
+  <section class="screen center" id="complete">
+    <div class="card">
+      <h2>Conversation complete</h2>
+      <p>Thank you. Your interaction has been recorded. Continue to the survey to answer the remaining questions.</p>
+      <button class="primary" id="return" type="button">Continue to survey</button>
+      <div class="status" id="saveStatus" aria-live="polite"></div>
+      <div class="small">Keep this page open until the survey opens.</div>
+    </div>
+  </section>
+</section>
+</main>
 
 <script>
 (() => {
   "use strict";
 
-  // ===========================================================================
-  // EDIT THESE THREE SETTINGS
-  // ===========================================================================
   const CONFIG = {
-    studyVersion: "1.0",
-
-    // Google Apps Script Web App URL used to store chatbot interaction logs.
+    studyVersion: "5.0",
+    botName: "Nova",
+    botAvatar: "nova-avatar.svg",
     googleSheetsEndpoint: "",
-
-    // Anonymous link for the SECOND Qualtrics survey (posttest).
-    // Example:
-    // https://YOUR-INSTITUTION.qualtrics.com/jfe/form/SV_XXXXXXXXXXXXXXX
     postSurveyUrl: "",
-
-    botDelayMs: 650,
-
-    // Demo content only. Replace after expert review and item pretesting.
+    typingDelayMs: 700,
+    minimumReadingMs: 1400,
     claims: [
-      {
-        id: "C1",
-        truth: "accurate",
-        formal:
-          "Earth completes one orbit around the Sun in approximately 365.25 days.",
-        pidgin:
-          "Earth dey take about 365.25 days complete one full journey around the Sun.",
-        explainFormal:
-          "That extra quarter of a day is one reason calendars use leap years.",
-        explainPidgin:
-          "That extra quarter-day na one reason why calendar get leap year.",
-        challengeFormal:
-          "Yes. The value is an approximation, but it is scientifically accepted.",
-        challengePidgin:
-          "Yes. Na approximate figure, but science accept am.",
-        sourceAvailable: true
-      },
-      {
-        id: "C2",
-        truth: "accurate",
-        formal:
-          "Earth’s seasons are caused mainly by the tilt of its rotational axis.",
-        pidgin:
-          "Na mainly because Earth bend small for its axis make we dey get different seasons.",
-        explainFormal:
-          "The tilt changes the angle and duration of sunlight received during the year.",
-        explainPidgin:
-          "The tilt dey change how sunlight take reach different places as the year dey go.",
-        challengeFormal:
-          "Yes. Distance from the Sun is not the primary cause of the seasons.",
-        challengePidgin:
-          "Yes. No be mainly how near Earth dey to Sun cause the seasons.",
-        sourceAvailable: true
-      },
-      {
-        id: "C3",
-        truth: "inaccurate",
-        formal:
-          "Humans normally use only about ten percent of their brains.",
-        pidgin:
-          "Normal human being dey use only about ten percent of the brain.",
-        explainFormal:
-          "The remaining capacity is largely inactive and can be developed through training.",
-        explainPidgin:
-          "The remaining part mostly no dey active, but person fit train am make e work better.",
-        challengeFormal:
-          "Yes. This is a commonly reported finding in popular neuroscience explanations.",
-        challengePidgin:
-          "Yes. Na something wey people dey commonly report for popular brain explanation.",
-        sourceAvailable: false
-      },
-      {
-        id: "C4",
-        truth: "accurate",
-        formal:
-          "Lightning can strike the same location repeatedly.",
-        pidgin:
-          "Lightning fit strike the same place more than one time.",
-        explainFormal:
-          "Tall or exposed structures may be struck many times.",
-        explainPidgin:
-          "Tall building or open place fit collect lightning many times.",
-        challengeFormal:
-          "Yes. Repeated strikes at the same location are well documented.",
-        challengePidgin:
-          "Yes. Evidence plenty say lightning dey return to the same place.",
-        sourceAvailable: true
-      },
-      {
-        id: "C5",
-        truth: "inaccurate",
-        formal:
-          "The Great Wall of China is clearly visible from the Moon with the unaided human eye.",
-        pidgin:
-          "Person fit clearly see Great Wall of China from Moon without telescope or any help.",
-        explainFormal:
-          "Its exceptional length makes it easily distinguishable from that distance.",
-        explainPidgin:
-          "Because the wall long well-well, person fit separate am from other things from that distance.",
-        challengeFormal:
-          "Yes. Its great length makes it a distinctive human-made landmark from the Moon.",
-        challengePidgin:
-          "Yes. The wall long reach, so e stand out as human-made thing from Moon.",
-        sourceAvailable: false
-      },
-      {
-        id: "C6",
-        truth: "accurate",
-        formal:
-          "At standard atmospheric pressure, pure water freezes at approximately zero degrees Celsius.",
-        pidgin:
-          "For normal air pressure, clean water dey freeze around zero degree Celsius.",
-        explainFormal:
-          "Dissolved substances and pressure changes can alter the exact freezing point.",
-        explainPidgin:
-          "Salt or pressure change fit shift the exact temperature small.",
-        challengeFormal:
-          "Yes. The statement assumes pure water at standard atmospheric pressure.",
-        challengePidgin:
-          "Yes. The statement assume say na pure water and normal air pressure.",
-        sourceAvailable: true
-      }
+      {id:"C1",truth:"accurate",
+       formal:"Earth completes one orbit around the Sun in approximately 365.25 days.",
+       pidgin:"Earth dey take about 365.25 days complete one full journey around the Sun."},
+      {id:"C2",truth:"accurate",
+       formal:"Earth’s seasons are caused mainly by the tilt of its rotational axis.",
+       pidgin:"Na mainly because Earth bend small for its axis make we dey get different seasons."},
+      {id:"C3",truth:"inaccurate",
+       formal:"Humans normally use only about ten percent of their brains.",
+       pidgin:"Normal human being dey use only about ten percent of the brain."},
+      {id:"C4",truth:"accurate",
+       formal:"Lightning can strike the same location repeatedly.",
+       pidgin:"Lightning fit strike the same place more than one time."},
+      {id:"C5",truth:"inaccurate",
+       formal:"The Great Wall of China is clearly visible from the Moon with the unaided human eye.",
+       pidgin:"Person fit clearly see Great Wall of China from Moon without telescope or any help."},
+      {id:"C6",truth:"accurate",
+       formal:"At standard atmospheric pressure, pure water freezes at approximately zero degrees Celsius.",
+       pidgin:"For normal air pressure, clean water dey freeze around zero degree Celsius."}
     ]
   };
 
-  const query = new URLSearchParams(window.location.search);
-  const incomingPid = (query.get("pid") || "").trim();
-  const incomingCondition = (query.get("condition") || "").trim().toLowerCase();
+  const qs = new URLSearchParams(location.search);
+  const pid = (qs.get("pid") || "").trim();
+  const condition = (qs.get("condition") || "").trim().toLowerCase();
+  const valid = Boolean(pid) && ["formal","pidgin"].includes(condition);
+  const storageKey = valid ? `aiTutor:${CONFIG.studyVersion}:${pid}` : "";
 
   const state = {
-    participantId: "",
-    condition: "",
-    developerMode: false,
-    startTimeISO: "",
-    endTimeISO: "",
-    currentClaimIndex: 0,
-    interactionLog: [],
-    completionCode: "",
-    submitted: false
+    participantId:pid, condition, studyVersion:CONFIG.studyVersion, startTimeISO:"",
+    endTimeISO:"", currentClaimIndex:0, currentClaimShownAtMs:0, completionCode:"",
+    interactionLog:[], flaggedClaims:[], submitted:false, completed:false
   };
 
-  const els = {
-    statusLabel: document.getElementById("statusLabel"),
-    progressBar: document.getElementById("progressBar"),
-    developerFields: document.getElementById("developerFields"),
-    participantId: document.getElementById("participantId"),
-    forcedCondition: document.getElementById("forcedCondition"),
-    startButton: document.getElementById("startButton"),
-    welcomeError: document.getElementById("welcomeError"),
-    chatLog: document.getElementById("chatLog"),
-    chatControls: document.getElementById("chatControls"),
-    continueSurveyButton: document.getElementById("continueSurveyButton"),
-    saveStatus: document.getElementById("saveStatus"),
-    redirectError: document.getElementById("redirectError")
+  const el = id => document.getElementById(id);
+  const E = {
+    landing:el("landing"), invalid:el("invalid"), chat:el("chat"), complete:el("complete"),
+    start:el("start"), stage:el("stage"), next:el("continue"), flag:el("flag"),
+    ret:el("return"), status:el("saveStatus"), bar:el("bar"), step:el("step")
   };
 
-  function showScreen(id) {
-    document.querySelectorAll(".screen").forEach(el => el.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-
-    const progress = {
-      welcomeScreen: 5,
-      chatScreen: 45,
-      completeScreen: 100
-    };
-    els.progressBar.style.width = `${progress[id] || 0}%`;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  function now(){return new Date().toISOString()}
+  function elapsed(){return state.startTimeISO ? Date.now()-new Date(state.startTimeISO).getTime() : 0}
+  function show(target){[E.landing,E.invalid,E.chat,E.complete].forEach(x=>x.classList.remove("active"));target.classList.add("active")}
+  function persist(){if(!storageKey)return;try{sessionStorage.setItem(storageKey,JSON.stringify(state))}catch(_){}}
+  function restore(){if(!storageKey)return false;try{
+    const raw=sessionStorage.getItem(storageKey); if(!raw)return false;
+    const saved=JSON.parse(raw);
+    if(saved.participantId!==pid||saved.condition!==condition||saved.studyVersion!==CONFIG.studyVersion)return false;
+    Object.assign(state,saved); return true;
+  }catch(_){return false}}
+  function log(type,details={}){
+    const claim=CONFIG.claims[state.currentClaimIndex];
+    state.interactionLog.push({event_number:state.interactionLog.length+1,timestamp_iso:now(),elapsed_ms:elapsed(),
+      type,claim_id:claim?claim.id:"",...details}); persist();
   }
-
-  function nowISO() {
-    return new Date().toISOString();
+  function progress(){
+    if(!state.startTimeISO){E.bar.style.width="0%";E.step.textContent="Ready";return}
+    if(state.completed){E.bar.style.width="100%";E.step.textContent="Complete";return}
+    const shown=Math.min(state.currentClaimIndex+1,CONFIG.claims.length);
+    E.bar.style.width=`${Math.max(8,Math.round(shown/CONFIG.claims.length*100))}%`;
+    E.step.textContent=`${shown} of ${CONFIG.claims.length}`;
   }
-
-  function elapsedMs() {
-    return state.startTimeISO
-      ? Date.now() - new Date(state.startTimeISO).getTime()
-      : 0;
-  }
-
-  function logEvent(type, details = {}) {
-    state.interactionLog.push({
-      event_number: state.interactionLog.length + 1,
-      timestamp_iso: nowISO(),
-      elapsed_ms: elapsedMs(),
-      type,
-      claim_id: CONFIG.claims[state.currentClaimIndex]?.id || "",
-      ...details
-    });
-  }
-
-  function generateCompletionCode() {
-    if (window.crypto && typeof window.crypto.randomUUID === "function") {
-      return window.crypto.randomUUID();
+  function timeText(){return new Intl.DateTimeFormat([],{hour:"numeric",minute:"2-digit"}).format(new Date())}
+  function bottom(){requestAnimationFrame(()=>E.stage.scrollTop=E.stage.scrollHeight)}
+  function message(sender,text){
+    const row=document.createElement("div");row.className=`row ${sender}`;
+    if(sender==="bot"){
+      const a=document.createElement("img");
+      a.className="mini";
+      a.src=CONFIG.botAvatar;
+      a.alt=`${CONFIG.botName} chatbot profile picture`;
+      row.appendChild(a)
     }
-    return `CC-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
+    const stack=document.createElement("div");stack.className="stack";
+    if(sender==="bot"){const n=document.createElement("div");n.className="name";n.textContent=CONFIG.botName;stack.appendChild(n)}
+    const b=document.createElement("div");b.className="bubble";b.textContent=text;stack.appendChild(b);
+    const m=document.createElement("div");m.className="meta";m.textContent=timeText();stack.appendChild(m);
+    row.appendChild(stack);E.stage.appendChild(row);bottom();
+  }
+  function systemNote(text){const n=document.createElement("div");n.className="system";n.textContent=text;E.stage.appendChild(n);bottom()}
+  function typing(cb){
+    const row=document.createElement("div");row.className="row bot";
+    row.innerHTML=`<img class="mini" src="${CONFIG.botAvatar}" alt="${CONFIG.botName} chatbot profile picture"><div class="stack"><div class="name">${CONFIG.botName}</div><div class="bubble typing" aria-label="${CONFIG.botName} is typing"><span class="td"></span><span class="td"></span><span class="td"></span></div></div>`;
+    E.stage.appendChild(row);bottom();setTimeout(()=>{row.remove();cb()},CONFIG.typingDelayMs)
+  }
+  function current(){return CONFIG.claims[state.currentClaimIndex]}
+  function textFor(c){return state.condition==="pidgin"?c.pidgin:c.formal}
+  function isFlagged(){const c=current();return Boolean(c&&state.flaggedClaims.includes(c.id))}
+  function updateFlag(){
+    if(isFlagged()){E.flag.textContent="Flagged for verification";E.flag.classList.add("flagged");E.flag.disabled=true}
+    else{E.flag.textContent="Flag for verification";E.flag.classList.remove("flagged")}
+  }
+  function enable(on){E.next.disabled=!on;E.flag.disabled=!on||isFlagged()}
+  function present(){
+    const c=current();if(!c){finish();return}
+    progress();updateFlag();enable(false);
+    typing(()=>{const t=textFor(c);message("bot",t);state.currentClaimShownAtMs=Date.now();
+      log("claim_presented",{displayed_text:t,assigned_condition:state.condition});
+      setTimeout(()=>{enable(true);updateFlag()},CONFIG.minimumReadingMs)})
+  }
+  function start(){
+    if(!valid){show(E.invalid);return}
+    state.startTimeISO=now();state.endTimeISO="";state.currentClaimIndex=0;state.currentClaimShownAtMs=0;
+    state.completionCode="";state.interactionLog=[];state.flaggedClaims=[];state.submitted=false;state.completed=false;
+    E.stage.innerHTML='<div class="day"><span>Today</span></div>';show(E.chat);progress();
+    log("chat_started",{assigned_condition:state.condition,study_version:state.studyVersion});
+    const opening="Abeg, fit you teach me some everyday things wey first-year university student suppose know?";
+    message("user",opening);log("participant_opening_message",{displayed_text:opening});
+    const greeting=state.condition==="pidgin"
+      ?"No wahala. Make we go through some everyday knowledge together. Read each one carefully."
+      :"Certainly. We will review several pieces of everyday knowledge together. Please read each one carefully.";
+    typing(()=>{message("bot",greeting);log("bot_greeting",{displayed_text:greeting});setTimeout(present,280)})
+  }
+  function next(){
+    const c=current();if(!c)return;const rt=state.currentClaimShownAtMs?Date.now()-state.currentClaimShownAtMs:"";
+    enable(false);message("user","Continue.");
+    log("continue_selected",{reading_time_ms:rt,was_flagged:Number(state.flaggedClaims.includes(c.id))});
+    state.currentClaimIndex+=1;persist();setTimeout(present,260)
+  }
+  function flag(){
+    const c=current();if(!c||isFlagged())return;
+    const rt=state.currentClaimShownAtMs?Date.now()-state.currentClaimShownAtMs:"";
+    state.flaggedClaims.push(c.id);log("claim_flagged_for_verification",{reading_time_ms:rt});
+    systemNote("Marked for verification. Supporting information will be provided after the activity.");
+    updateFlag();persist()
+  }
+  function code(){return crypto&&crypto.randomUUID?crypto.randomUUID():`CC-${Date.now()}-${Math.random().toString(36).slice(2,12)}`}
+  function flat(){
+    const dur=state.startTimeISO&&state.endTimeISO?Math.round((new Date(state.endTimeISO)-new Date(state.startTimeISO))/1000):"";
+    return {participant_id:state.participantId,assigned_condition:state.condition,study_version:state.studyVersion,
+      chatbot_complete:Number(state.completed),completion_code:state.completionCode,start_time_iso:state.startTimeISO,
+      end_time_iso:state.endTimeISO,duration_seconds:dur,
+      claims_presented:state.interactionLog.filter(x=>x.type==="claim_presented").length,
+      verification_count:state.flaggedClaims.length,flagged_claims_json:JSON.stringify(state.flaggedClaims),
+      interaction_log_json:JSON.stringify(state.interactionLog)}
+  }
+  async function save(){
+    if(state.submitted)return true;
+    if(!CONFIG.googleSheetsEndpoint){E.status.textContent="The activity is complete. Select Continue to survey.";return false}
+    E.status.textContent="Saving your interaction…";
+    try{await fetch(CONFIG.googleSheetsEndpoint,{method:"POST",mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(flat()),keepalive:true});
+      state.submitted=true;persist();E.status.textContent="Interaction saved.";return true}
+    catch(_){E.status.textContent="Your interaction could not be confirmed as saved. You may still continue.";return false}
+  }
+  function postUrl(){
+    if(!CONFIG.postSurveyUrl)return "";
+    const d=flat(),u=new URL(CONFIG.postSurveyUrl);
+    u.searchParams.set("participant_id",d.participant_id);u.searchParams.set("condition",d.assigned_condition);
+    u.searchParams.set("chat_complete","1");u.searchParams.set("completion_code",d.completion_code);
+    u.searchParams.set("chat_duration_sec",String(d.duration_seconds));u.searchParams.set("claims_presented",String(d.claims_presented));
+    u.searchParams.set("verification_count",String(d.verification_count));u.searchParams.set("flagged_claims",state.flaggedClaims.join("|"));
+    u.searchParams.set("study_version",d.study_version);return u.toString()
+  }
+  async function finish(){
+    state.completed=true;state.endTimeISO=now();state.completionCode=code();
+    log("chat_completed",{completion_code:state.completionCode,verification_count:state.flaggedClaims.length});
+    progress();show(E.complete);await save()
+  }
+  async function returnSurvey(){
+    E.ret.disabled=true;await save();const u=postUrl();
+    if(!u){E.status.textContent="The post-survey address has not been configured. Please inform the researcher.";
+      E.status.classList.add("error");E.ret.disabled=false;return}
+    E.status.classList.remove("error");E.status.textContent="Opening the survey…";setTimeout(()=>location.assign(u),300)
+  }
+  function init(){
+    if(!valid){show(E.invalid);progress();return}
+    const restored=restore();
+    if(restored&&state.completed){progress();show(E.complete);E.status.textContent="This interaction was already completed in this browser session.";return}
+    if(restored&&state.startTimeISO&&!state.completed)sessionStorage.removeItem(storageKey);
+    show(E.landing);progress()
   }
 
-  function addMessage(sender, text) {
-    const row = document.createElement("div");
-    row.className = `message-row ${sender}`;
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.textContent = text;
-    row.appendChild(bubble);
-    els.chatLog.appendChild(row);
-    els.chatLog.scrollTop = els.chatLog.scrollHeight;
-  }
-
-  function showTyping(callback) {
-    const row = document.createElement("div");
-    row.className = "message-row bot";
-    row.innerHTML = '<div class="bubble typing">AI tutor is typing…</div>';
-    els.chatLog.appendChild(row);
-    els.chatLog.scrollTop = els.chatLog.scrollHeight;
-
-    setTimeout(() => {
-      row.remove();
-      callback();
-    }, CONFIG.botDelayMs);
-  }
-
-  function currentClaim() {
-    return CONFIG.claims[state.currentClaimIndex];
-  }
-
-  function conditionText(claim, key) {
-    const isPidgin = state.condition === "pidgin";
-    if (key === "main") return isPidgin ? claim.pidgin : claim.formal;
-    if (key === "explain") return isPidgin ? claim.explainPidgin : claim.explainFormal;
-    if (key === "challenge") return isPidgin ? claim.challengePidgin : claim.challengeFormal;
-    return "";
-  }
-
-  function disableControls(disabled) {
-    els.chatControls.querySelectorAll("button").forEach(btn => {
-      btn.disabled = disabled;
-    });
-  }
-
-  function presentClaim() {
-    const claim = currentClaim();
-
-    if (!claim) {
-      completeInteraction();
-      return;
-    }
-
-    disableControls(true);
-    showTyping(() => {
-      const text = conditionText(claim, "main");
-      addMessage("bot", text);
-      logEvent("claim_presented", { displayed_text: text });
-      disableControls(false);
-    });
-  }
-
-  function handleChatAction(action) {
-    const claim = currentClaim();
-    if (!claim) return;
-
-    disableControls(true);
-    logEvent("participant_action", { action });
-
-    if (action === "continue") {
-      addMessage(
-        "user",
-        state.condition === "pidgin" ? "Okay, continue." : "Please continue."
-      );
-      state.currentClaimIndex += 1;
-      setTimeout(presentClaim, 250);
-      return;
-    }
-
-    if (action === "explain") {
-      addMessage(
-        "user",
-        state.condition === "pidgin"
-          ? "Abeg explain am again."
-          : "Please explain that again."
-      );
-      showTyping(() => {
-        const text = conditionText(claim, "explain");
-        addMessage("bot", text);
-        logEvent("branch_response", {
-          branch: "explain",
-          displayed_text: text
-        });
-        disableControls(false);
-      });
-      return;
-    }
-
-    if (action === "challenge") {
-      addMessage(
-        "user",
-        state.condition === "pidgin"
-          ? "You sure say this one correct?"
-          : "Are you sure that is correct?"
-      );
-      showTyping(() => {
-        const text = conditionText(claim, "challenge");
-        addMessage("bot", text);
-        logEvent("branch_response", {
-          branch: "challenge",
-          displayed_text: text
-        });
-        disableControls(false);
-      });
-      return;
-    }
-
-    if (action === "source") {
-      addMessage(
-        "user",
-        state.condition === "pidgin"
-          ? "Show me source."
-          : "Can I check the source?"
-      );
-
-      showTyping(() => {
-        const sourceText = claim.sourceAvailable
-          ? (state.condition === "pidgin"
-              ? "A source category dey available, but the full source go show after the study."
-              : "A source category is available, but the full source will be shown after the study.")
-          : (state.condition === "pidgin"
-              ? "I no get source link to show for this claim now."
-              : "I do not have a source link available for this claim.");
-
-        addMessage("bot", sourceText);
-        logEvent("branch_response", {
-          branch: "source",
-          source_available: claim.sourceAvailable
-        });
-        disableControls(false);
-      });
-    }
-  }
-
-  function flattenData() {
-    const durationSeconds = state.endTimeISO
-      ? Math.round(
-          (new Date(state.endTimeISO).getTime() -
-           new Date(state.startTimeISO).getTime()) / 1000
-        )
-      : "";
-
-    return {
-      participant_id: state.participantId,
-      assigned_condition: state.condition,
-      study_version: CONFIG.studyVersion,
-      chatbot_complete: 1,
-      completion_code: state.completionCode,
-      start_time_iso: state.startTimeISO,
-      end_time_iso: state.endTimeISO,
-      duration_seconds: durationSeconds,
-      claims_presented: state.interactionLog.filter(
-        event => event.type === "claim_presented"
-      ).length,
-      challenge_clicks: state.interactionLog.filter(
-        event => event.action === "challenge"
-      ).length,
-      source_clicks: state.interactionLog.filter(
-        event => event.action === "source"
-      ).length,
-      explain_clicks: state.interactionLog.filter(
-        event => event.action === "explain"
-      ).length,
-      interaction_log_json: JSON.stringify(state.interactionLog)
-    };
-  }
-
-  async function saveChatbotData() {
-    if (state.submitted) return true;
-
-    if (!CONFIG.googleSheetsEndpoint) {
-      els.saveStatus.textContent =
-        "Development mode: no Google Sheets endpoint is configured.";
-      return false;
-    }
-
-    els.saveStatus.textContent = "Saving interaction…";
-
-    try {
-      await fetch(CONFIG.googleSheetsEndpoint, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(flattenData()),
-        keepalive: true
-      });
-
-      state.submitted = true;
-      els.saveStatus.textContent = "Interaction saved.";
-      return true;
-    } catch (error) {
-      els.saveStatus.textContent =
-        "The interaction could not be confirmed as saved. You may still continue.";
-      return false;
-    }
-  }
-
-  function buildPostSurveyUrl() {
-    if (!CONFIG.postSurveyUrl) return "";
-
-    const data = flattenData();
-    const url = new URL(CONFIG.postSurveyUrl);
-
-    url.searchParams.set("participant_id", data.participant_id);
-    url.searchParams.set("condition", data.assigned_condition);
-    url.searchParams.set("chat_complete", "1");
-    url.searchParams.set("completion_code", data.completion_code);
-    url.searchParams.set("chat_duration_sec", String(data.duration_seconds));
-    url.searchParams.set("claims_presented", String(data.claims_presented));
-    url.searchParams.set("challenge_clicks", String(data.challenge_clicks));
-    url.searchParams.set("source_clicks", String(data.source_clicks));
-    url.searchParams.set("explain_clicks", String(data.explain_clicks));
-    url.searchParams.set("study_version", data.study_version);
-
-    return url.toString();
-  }
-
-  async function completeInteraction() {
-    state.endTimeISO = nowISO();
-    state.completionCode = generateCompletionCode();
-    logEvent("chatbot_completed", {
-      completion_code: state.completionCode
-    });
-
-    disableControls(true);
-    showScreen("completeScreen");
-    await saveChatbotData();
-  }
-
-  async function continueToSurvey() {
-    els.continueSurveyButton.disabled = true;
-    await saveChatbotData();
-
-    const returnUrl = buildPostSurveyUrl();
-
-    if (!returnUrl) {
-      els.redirectError.style.display = "block";
-      els.continueSurveyButton.disabled = false;
-      return;
-    }
-
-    els.saveStatus.textContent = "Returning to the survey…";
-    window.location.assign(returnUrl);
-  }
-
-  function initializeFromUrl() {
-    const validCondition =
-      incomingCondition === "formal" || incomingCondition === "pidgin";
-
-    if (incomingPid && validCondition) {
-      state.participantId = incomingPid;
-      state.condition = incomingCondition;
-      state.developerMode = false;
-      return;
-    }
-
-    state.developerMode = true;
-    els.developerFields.classList.remove("hidden");
-  }
-
-  els.startButton.addEventListener("click", () => {
-    if (state.developerMode) {
-      const testPid = els.participantId.value.trim();
-      const testCondition = els.forcedCondition.value;
-
-      if (!testPid || !["formal", "pidgin"].includes(testCondition)) {
-        els.welcomeError.style.display = "block";
-        return;
-      }
-
-      state.participantId = testPid;
-      state.condition = testCondition;
-    }
-
-    if (!state.participantId || !["formal", "pidgin"].includes(state.condition)) {
-      els.welcomeError.style.display = "block";
-      return;
-    }
-
-    els.welcomeError.style.display = "none";
-    state.startTimeISO = nowISO();
-
-    logEvent("study_started", {
-      assigned_condition: state.condition,
-      study_version: CONFIG.studyVersion
-    });
-
-    showScreen("chatScreen");
-
-    const openingUser =
-      "Please teach me a few things that every first-year university student should know.";
-
-    addMessage("user", openingUser);
-    logEvent("opening_message", { displayed_text: openingUser });
-
-    const greeting =
-      state.condition === "pidgin"
-        ? "No wahala. Make we go through some everyday knowledge together. I go explain each one simply."
-        : "Certainly. We will review several pieces of everyday knowledge, and I will explain each one clearly.";
-
-    showTyping(() => {
-      addMessage("bot", greeting);
-      logEvent("bot_greeting", { displayed_text: greeting });
-      setTimeout(presentClaim, 300);
-    });
-  });
-
-  els.chatControls.addEventListener("click", event => {
-    const button = event.target.closest("button[data-action]");
-    if (!button) return;
-    handleChatAction(button.dataset.action);
-  });
-
-  els.continueSurveyButton.addEventListener("click", continueToSurvey);
-
-  window.addEventListener("beforeunload", () => {
-    if (state.startTimeISO && !state.endTimeISO) {
-      logEvent("page_exit_before_completion");
-    }
-  });
-
-  initializeFromUrl();
+  E.start.addEventListener("click",start);
+  E.next.addEventListener("click",next);
+  E.flag.addEventListener("click",flag);
+  E.ret.addEventListener("click",returnSurvey);
+  init();
 })();
 </script>
 </body>
