@@ -291,7 +291,7 @@
     state.completionCode="";state.interactionLog=[];state.flaggedClaims=[];state.submitted=false;state.completed=false;
     E.stage.innerHTML='<div class="day"><span>Today</span></div>';show(E.chat);progress();
     log("chat_started",{assigned_condition:state.condition,study_version:state.studyVersion});
-    const opening="Abeg, fit you explain some everyday things about social media and messaging?";
+    const opening="Abeg, you fit explain some everyday things about social media and messaging?";
     message("user",opening);log("participant_opening_message",{displayed_text:opening});
     const greeting=state.condition==="pidgin"
       ?"Okay. Make we go through ten everyday things about social media and messaging. Abeg read each one carefully."
